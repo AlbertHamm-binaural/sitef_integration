@@ -30,6 +30,7 @@ class ValidarPagoMovilForm extends AbstractAwaitablePopup {
             let codestall = this.env.pos.config.codestall_sitef;
             let receivingbank = parseInt(this.env.pos.config.issuingbank_pm_sitef, 10);
     
+            let invoicenumber = this.props.orden;
             let paymentreference = this.referencia.el.value;
             let telefono = this.tipNum.el.value + this.telefono.el.value;
             let origenbank = parseInt(this.banco.el.value, 10);
@@ -39,7 +40,7 @@ class ValidarPagoMovilForm extends AbstractAwaitablePopup {
 
             const token = await this.generarToken(url, username, password);
             if (token) {
-                const pago = await this.validarPago(url, username, token, idbranch, codestall, amount, paymentreference, debitphone, origenbank, receivingbank, trxdate);
+                const pago = await this.validarPago(url, username, token, idbranch, codestall, amount, paymentreference, debitphone, origenbank, receivingbank, trxdate, invoicenumber);
             }
         } else {
             this.showPopup('ErrorPopup', {
@@ -65,29 +66,29 @@ class ValidarPagoMovilForm extends AbstractAwaitablePopup {
         }
     }
     
-    async validarPago(url, username, token, idbranch, codestall, amount, paymentreference, debitphone, origenbank, receivingbank, trxdate) {
+    async validarPago(url, username, token, idbranch, codestall, amount, paymentreference, debitphone, origenbank, receivingbank, trxdate, invoicenumber) {
         try {
             const result = await ajax.jsonRpc(
                 "/sitef_pos_integration/validarPago_sitef", "call",
-                { url, username, token, idbranch, codestall, amount, paymentreference, debitphone, origenbank, receivingbank, trxdate }
+                { url, username, token, idbranch, codestall, amount, paymentreference, debitphone, origenbank, receivingbank, trxdate, invoicenumber }
             );
-            if (result == "marcada") {
+            if (result.marcada == "marcada") {
                 this.showPopup('ConfirmPopup', {
                     title: this.env._t('Validación de pago móvil'),
                     body: this.env._t('El pago móvil fue validado con éxito')
                 });
                 this.env.posbus.trigger('close-popup', {
                     popupId: this.props.id,
-                    response: { confirmed: true, payload: await this.getPayload() },
+                    response: { confirmed: true, payload: result.payment_reference},
                 });    
-                return result;
+                return result.payment_reference;
             } 
-            else if (result == "verified") {
+            else if (result.marcada == "verified") {
                 this.showPopup('ErrorPopup', {
                     title: this.env._t('Validación de pago móvil'),
                     body: this.env._t('El pago móvil ya fue validado anteriormente'),
                 });
-                return result;
+                return null;
             } 
             else if (result.error) {
                 this.showPopup('ErrorPopup', {

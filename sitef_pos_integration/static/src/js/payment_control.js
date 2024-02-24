@@ -13,7 +13,6 @@ odoo.define('sitef_pos_integration.payment_control', function (require) {
         }
 
         async cambio() {
-            console.log(this.selectedPaymentLine);
             if (this.selectedPaymentLine && this.selectedPaymentLine.amount < 0) {
                 if (this.selectedPaymentLine.transaction_id) {
                     this.showPopup('ErrorPopup', {
@@ -22,10 +21,10 @@ odoo.define('sitef_pos_integration.payment_control', function (require) {
                     });
                     return;
                 } else {
-                    const { confirmed, payload: payment_reference } = await this.showPopup('CambioForm', {amount: Math.abs(this.selectedPaymentLine.amount)});
+                    const { confirmed, payload: payment_reference } = await this.showPopup('CambioForm', {amount: Math.abs(this.selectedPaymentLine.amount), orden:this.currentOrder.uid});
                     if (confirmed) {
                         this.selectedPaymentLine.transaction_id = payment_reference;
-                        this.selectedPaymentLine.ticket = "Cambio";
+                        // this.selectedPaymentLine.ticket = "Cambio";
                     } else {
                         console.log('No se obtuvo referencia de pago');
                     }
@@ -40,8 +39,22 @@ odoo.define('sitef_pos_integration.payment_control', function (require) {
 
         async validarPagoMovil() {
             if (this.selectedPaymentLine && this.selectedPaymentLine.amount > 0) {
-                this.showPopup('ValidarPagoMovilForm', {amount: parseFloat(Math.abs(this.selectedPaymentLine.amount).toFixed(2))});
-                
+                if (this.selectedPaymentLine.transaction_id) {
+                    this.showPopup('ErrorPopup', {
+                        title: this.env._t('Operación Fallida'),
+                        body: this.env._t('No se puede aplicar el cambio porque ya se realizó anteriormente en esta línea.'),
+                    });
+                    return;
+                } else {
+                    const { confirmed, payload: payment_reference } = await this.showPopup('ValidarPagoMovilForm', {amount: parseFloat(Math.abs(this.selectedPaymentLine.amount).toFixed(2)), orden:this.currentOrder.uid});
+                    if (confirmed) {
+                        console.log(payment_reference)
+                        this.selectedPaymentLine.transaction_id = payment_reference;
+                        // this.selectedPaymentLine.ticket = "Cambio";
+                    } else {
+                        console.log('No se obtuvo referencia de pago');
+                    }
+                }
             }
             else {
                 this.showPopup('ErrorPopup', {
@@ -113,7 +126,8 @@ odoo.define('sitef_pos_integration.payment_control', function (require) {
             }
         }
         _updateSelectedPaymentline() {
-            if (this.selectedPaymentLine.transaction_id) return;
+            const transaction_id = this.selectedPaymentLine?.transaction_id || null;
+            if (transaction_id) return;
             
             if (this.paymentLines.every((line) => line.paid)) {
                 this.currentOrder.add_paymentline(this.payment_methods_from_config[0]);

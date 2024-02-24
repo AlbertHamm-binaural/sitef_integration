@@ -27,7 +27,8 @@ class CambioForm extends AbstractAwaitablePopup {
             let idbranch = this.env.pos.config.idbranch_sitef;        
             let codestall = this.env.pos.config.codestall_sitef;
             let issuingbank = parseInt(this.env.pos.config.issuingbank_pm_sitef, 10);
-    
+            
+            let invoicenumber = this.props.orden;
             let tipDoc = this.tipDoc.el.value;
             let doc = this.doc.el.value;
             let telefono = this.tipNum.el.value + this.telefono.el.value;
@@ -37,10 +38,9 @@ class CambioForm extends AbstractAwaitablePopup {
             let destinationid = tipDoc + doc;
 
             let destinationmobilenumber = '58' + telefono.substring(1);
-            
             const token = await this.generarToken(url, username, password);
             if (token) {
-                const cambio = await this.generarCambio(url, username, token, idbranch, codestall, destinationid, destinationmobilenumber, destinationbank, issuingbank, amount);
+                const cambio = await this.generarCambio(url, username, token, idbranch, codestall, destinationid, destinationmobilenumber, destinationbank, issuingbank, invoicenumber, amount);
             }
         } else {
             this.showPopup('ErrorPopup', {
@@ -67,11 +67,11 @@ class CambioForm extends AbstractAwaitablePopup {
         }
     }
     
-    async generarCambio(url, username, token, idbranch, codestall, destinationid, destinationmobilenumber, destinationbank, issuingbank, amount) {
+    async generarCambio(url, username, token, idbranch, codestall, destinationid, destinationmobilenumber, destinationbank, issuingbank, invoicenumber, amount) {
         try {    
             const result = await ajax.jsonRpc(
                 "/sitef_pos_integration/cambio_sitef", "call",
-                { url, username, token, idbranch, codestall, destinationid, destinationmobilenumber, destinationbank, issuingbank, amount}
+                { url, username, token, idbranch, codestall, destinationid, destinationmobilenumber, destinationbank, issuingbank, invoicenumber, amount}
             );
             if (result.trx_status == "approved") {
                 this.showPopup('ConfirmPopup', {

@@ -9,7 +9,6 @@
         <field name="binding_model_id" ref="model_pos_report_sitef"/>
         <field name="binding_type">report</field>
         <field name="print_report_name">'Reporte POS Sitef'</field>
-        <field name="attachment">Reportes por caja Sitef</field>
     </record>
 
     <template id="report_pos_sitef">
@@ -55,16 +54,18 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th colspan="12" class="text-start">Sucursal: <t t-esc="data['Sucursal']"/></th>
+                                <th colspan="14" class="text-start">Sucursal: <t t-esc="data['Sucursal']"/></th>
                             </tr>
                             <tr style="background-color: #bcbcbc;">
                                 <th style="vertical-align: middle;">Lote</th>
                                 <th style="vertical-align: middle;">ID</th>
                                 <th style="vertical-align: middle;">Tipo</th>
                                 <th style="vertical-align: middle;">Monto</th>
+                                <th style="vertical-align: middle;">Documento</th>
                                 <th style="vertical-align: middle;">Comerciante ID</th>
+                                <th style="vertical-align: middle;">Factura</th>
                                 <th style="vertical-align: middle;">Referencia</th>
-                                <th style="vertical-align: middle;">Fecha</th>
+                                <th style="vertical-align: middle;">Fecha/Hora</th>
                                 <th style="vertical-align: middle;">Mensaje</th>
                                 <th style="vertical-align: middle;">Teléfono de Débito</th>
                                 <th style="vertical-align: middle;">Móvil de Destino</th>
@@ -78,20 +79,21 @@
                                 <td style="vertical-align: middle;" t-esc="line['id']"></td>
                                 <td style="vertical-align: middle;" t-esc="line['nameTransaction']"></td>
                                 <td style="vertical-align: middle;" t-esc="line['amount']"></td>
+                                <td style="vertical-align: middle;" t-esc="line.get('destinationId') if line.get('destinationId') else '-'"></td>
                                 <td style="vertical-align: middle;" t-esc="line['merchantId']"></td>
+                                <td style="vertical-align: middle;" t-esc="line.get('invoiceNumber') if line.get('invoiceNumber') else '-'"></td>
                                 <td style="vertical-align: middle;" t-esc="line.get('paymentReference') if line.get('paymentReference') else '-'"></td>
                                 <td style="vertical-align: middle;" t-esc="line['dateTransaction']"></td>
                                 <td style="vertical-align: middle;" t-esc="line['transMsg']"></td>
                                 <td style="vertical-align: middle;" t-esc="line.get('telefonoDebito') if line.get('telefonoDebito') else '-'"></td>
                                 <td style="vertical-align: middle;" t-esc="line.get('destinationMobile') if line.get('destinationMobile') else '-'"></td>
-                                <td style="vertical-align: middle;" t-esc="line.get('nameTransaction') if line.get('nameTransaction') else '-'"></td>
+                                <td style="vertical-align: middle;" t-esc="line.get('nameTransaction') == 'consulta' and line['destinationBank'] or '0' + line['destinationBank']"></td>
                                 <td style="vertical-align: middle;" t-esc="line['adquiriente']"></td>
                             </tr>
                         </tbody>
                     </table>
                     
                     <t t-foreach="data['Totales'].items()" t-as="item" t-key="item">
-                        <t t-set="total_transaccion" t-value="0"/>
                         <t t-set="total_transaccion_aprobadas" t-value="0"/>
                         <t t-set="total_transaccion_aprobadas_bs" t-value="0"/>
                         <t t-set="total_transaccion_rechazadas" t-value="0"/>
@@ -119,7 +121,6 @@
                             </thead>
                             <tbody class="text-center">
                                 <tr>
-                                    <t t-set="total_transaccion" t-value="total_transaccion + item[1]['Total_Vueltos']"/>
                                     <t t-set="total_transaccion_aprobadas" t-value="total_transaccion_aprobadas + item[1]['Total_Vueltos_Aprobados']"/>
                                     <t t-set="total_transaccion_aprobadas_bs" t-value="total_transaccion_aprobadas_bs + item[1]['Total_Vueltos_Aprobados_Bs']"/>
                                     <t t-set="total_transaccion_rechazadas" t-value="total_transaccion_rechazadas + item[1]['Total_Vueltos_Rechazados']"/>
@@ -133,7 +134,6 @@
                                     <td t-esc="item[1]['Total_Vueltos_Rechazadas_Bs']"/>
                                 </tr>
                                 <tr>
-                                    <t t-set="total_transaccion" t-value="total_transaccion + item[1]['Total_Consultas']"/>
                                     <t t-set="total_transaccion_aprobadas" t-value="total_transaccion_aprobadas + item[1]['Total_Consultas_Aprobadas']"/>
                                     <t t-set="total_transaccion_aprobadas_bs" t-value="total_transaccion_aprobadas_bs + item[1]['Total_Consultas_Aprobados_Bs']"/>
                                     <t t-set="total_transaccion_rechazadas" t-value="total_transaccion_rechazadas + item[1]['Total_Consultas_Rechazadas']"/>
@@ -147,7 +147,6 @@
                                     <td t-esc="item[1]['Total_Consultas_Rechazadas_Bs']"/>
                                 </tr>
                                 <tr>
-                                    <t t-set="total_transaccion" t-value="total_transaccion + item[1]['Total_Transferencia']"/>
                                     <t t-set="total_transaccion_aprobadas" t-value="total_transaccion_aprobadas + item[1]['Total_Transferencia_Aprobadas']"/>
                                     <t t-set="total_transaccion_aprobadas_bs" t-value="total_transaccion_aprobadas_bs + item[1]['Total_Transferencia_Aprobadas_Bs']"/>
                                     <t t-set="total_transaccion_rechazadas" t-value="total_transaccion_rechazadas + item[1]['Total_Transferencia_Rechazadas']"/>
@@ -161,7 +160,6 @@
                                     <td t-esc="item[1]['Total_Transferencia_Rechazadas_Bs']"/>
                                 </tr>
                                 <tr>
-                                    <t t-set="total_transaccion" t-value="total_transaccion + item[1]['Total_TransferenciaInmediata']"/>
                                     <t t-set="total_transaccion_aprobadas" t-value="total_transaccion_aprobadas + item[1]['Total_TransferenciaInmediata_Aprobadas']"/>
                                     <t t-set="total_transaccion_aprobadas_bs" t-value="total_transaccion_aprobadas_bs + item[1]['Total_TransferenciaInmediata_Aprobadas_Bs']"/>
                                     <t t-set="total_transaccion_rechazadas" t-value="total_transaccion_rechazadas + item[1]['Total_TransferenciaInmediata_Rechazadas']"/>
@@ -175,7 +173,6 @@
                                     <td t-esc="item[1]['Total_TransferenciaInmediata_Rechazadas_Bs']"/>
                                 </tr>
                                 <tr>
-                                    <t t-set="total_transaccion" t-value="total_transaccion + item[1]['Total_Clavepagos']"/>
                                     <t t-set="total_transaccion_aprobadas" t-value="total_transaccion_aprobadas + item[1]['Total_Clavepagos_Aprobados']"/>
                                     <t t-set="total_transaccion_aprobadas_bs" t-value="total_transaccion_aprobadas_bs + item[1]['Total_Clavepagos_Aprobados_Bs']"/>
                                     <t t-set="total_transaccion_rechazadas" t-value="total_transaccion_rechazadas + item[1]['Total_Clavepagos_Rechazados']"/>
@@ -189,7 +186,6 @@
                                     <td t-esc="item[1]['Total_Clavepagos_Rechazados_Bs']"/>
                                 </tr>
                                 <tr>
-                                    <t t-set="total_transaccion" t-value="total_transaccion + item[1]['Total_Zelle']"/>
                                     <t t-set="total_transaccion_aprobadas" t-value="total_transaccion_aprobadas + item[1]['Total_Zelle_Aprobados']"/>
                                     <t t-set="total_transaccion_aprobadas_bs" t-value="total_transaccion_aprobadas_bs + item[1]['Total_Zelle_Aprobados_Bs']"/>
                                     <t t-set="total_transaccion_rechazadas" t-value="total_transaccion_rechazadas + item[1]['Total_Zelle_Rechazados']"/>
@@ -204,7 +200,7 @@
                                 </tr>
                                 <tr style="background-color: #e0e0e0;">
                                     <td>Totales</td>
-                                    <td t-esc="round(total_transaccion, 2)"></td>
+                                    <td t-esc="round(item[1]['Total_Transaciones'], 2)"></td>
                                     <td t-esc="round(total_transaccion_aprobadas, 2)"></td>
                                     <td t-esc="round(total_transaccion_aprobadas_bs, 2)"></td>
                                     <td t-esc="round(total_transaccion_rechazadas, 2)"></td>

@@ -35,10 +35,10 @@ class SitefController(http.Controller):
                     "error": "Campo username, password o url vacío."}
     
     @http.route('/sitef_pos_integration/cambio_sitef', type='json', methods=['POST'])
-    def cambio_sitef(self, url, username, token, idbranch, codestall, destinationid, destinationmobilenumber, destinationbank, issuingbank, amount):
+    def cambio_sitef(self, url, username, token, idbranch, codestall, destinationid, destinationmobilenumber, destinationbank, issuingbank, invoicenumber, amount):
         _logger.warning("INSIDE VUELTO SITEF")
         headers = {
-            "Authorization": f"Bearer {token}"
+            "Authorization": f"Bearer {token}"  
         }
         token_md5 = hashlib.md5(token.encode()).hexdigest()
         response = requests.post(url + "/sitefAuth/setVueltoSitef", json={
@@ -50,7 +50,7 @@ class SitefController(http.Controller):
             "destinationmobilenumber": destinationmobilenumber, 
             "destinationbank": destinationbank,
             "issuingbank": issuingbank, 
-            "invoicenumber": "No aplica",
+            "invoicenumber": invoicenumber,
             "amount": amount
         }, headers=headers)
         
@@ -104,7 +104,7 @@ class SitefController(http.Controller):
             return {"error": f"Error en la solicitud: {response.status_code}"}
     
     @http.route('/sitef_pos_integration/validarPago_sitef', type='json', methods=['POST'])
-    def validarPago_sitef(self, url, username, token, idbranch, codestall, amount, paymentreference, debitphone, origenbank, receivingbank, trxdate):
+    def validarPago_sitef(self, url, username, token, idbranch, codestall, amount, paymentreference, debitphone, origenbank, receivingbank, trxdate, invoicenumber):
         _logger.warning("INSIDE VALIDAR PAGO SITEF")
         headers = {
             "Authorization": f"Bearer {token}"
@@ -119,7 +119,7 @@ class SitefController(http.Controller):
             "paymentreference": paymentreference,
             "debitphone": debitphone,
             "origenbank": origenbank,
-            "invoicenumber": "No aplica",
+            "invoicenumber": invoicenumber,
             "receivingbank": receivingbank,
             "trxdate": trxdate
         }, headers=headers)
@@ -129,7 +129,10 @@ class SitefController(http.Controller):
             _logger.warning(response_json)
             
             if "data" in response_json and "marcada" in response_json["data"]:
-                return response_json["data"]["marcada"]
+                return {
+                    "marcada": response_json["data"]["marcada"],
+                    "payment_reference": response_json["data"]["transaction_list"][0]['payment_reference']
+                }
             elif "code" in response_json and response_json["code"] == 204 and "messages" in response_json:
                 return {
                     "title_error": "Configuración del Módulo incorrecta",
