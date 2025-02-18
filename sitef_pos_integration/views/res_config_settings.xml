@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_res_config_settings_inherit_sitef" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.sitef</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="point_of_sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@data-key='point_of_sale']" position="inside">
+                <h2>Configuración (Sitef)</h2>
+                <div class="row mt16 o_settings_container">
+                    <div class="col12 col-lg-6">
+                        <div class="form-group">
+                            <label for="username_sitef" class="col-form-label">Username</label>
+                            <div class="col-sm-8">
+                                <field name="username_sitef"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password_sitef" class="col-form-label">Password</label>
+                            <div class="col-sm-8">
+                                <field name="password_sitef" password="True"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="url_sitef" class="col-form-label">URL</label>
+                            <div class="col-sm-8">
+                                <field name="url_sitef"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="idbranch_sitef" class="col-form-label">Branch ID</label>
+                            <div class="col-sm-8">
+                                <field name="idbranch_sitef"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="codestall_sitef" class="col-form-label">Code Stall</label>
+                            <div class="col-sm-8">
+                                <field name="codestall_sitef"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col12 col-lg-6">
+                        <h3><b><u>Metodos de Pago</u></b></h3>
+                        <div class="o_setting_left_pane">
+                            <field name="activated_pm_sitef"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="activated_pm_sitef" string="Pago Móvil"/>
+                            <div class="text-muted">
+                                Validar el pago de un cliente por Pago Móvil
+                            </div>
+                        </div>
+                        <div class="o_setting_left_pane">
+                            <field name="activated_trf_sitef"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="activated_trf_sitef" string="Transferencia"/>
+                            <div class="text-muted">
+                                Validar el pago de un cliente por Transferencia
+                            </div>
+                        </div>
+                        <div class="o_setting_left_pane">
+                            <field name="activated_zelle_sitef"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="activated_zelle_sitef" string="Zelle"/>
+                            <div class="text-muted">
+                                Validar el pago de un cliente por Zelle
+                            </div>
+                        </div>
+                        <h3><b><u>Metodos de Cambio</u></b></h3>
+                        <div class="form-group">
+                            <div class="o_setting_left_pane">
+                                <field name="activated_cpm_sitef"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="activated_cpm_sitef" string="Pago Móvil"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h2>Datos de Pago (Sitef)</h2>
+                <div class="row mt16 o_settings_container">
+                    <div class="col12 col-lg-6">
+                    <h3><b><u>Pago Móvil</u></b></h3>
+                        <div class="form-group">
+                            <label for="issuingbank_pm_sitef" class="col-form-label">Banco Emisor</label>
+                            <div class="col-sm-8">
+                                <field name="issuingbank_pm_sitef" widget="selection"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="issuingid_pm_sitef" class="col-form-label">Identificación Emisor</label>
+                            <div class="col-sm-8">
+                                <field name="issuingid_pm_sitef"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="issuingmobilenumber_pm_sitef" class="col-form-label">Número Telefónico Emisor</label>
+                            <div class="col-sm-8">
+                                <field name="issuingmobilenumber_pm_sitef"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col12 col-lg-6">
+                    <h3><b><u>Transferencia Bancaria</u></b></h3>
+                        <div class="form-group">
+                            <label for="issuingbank_trf_sitef" class="col-form-label">Banco Emisor</label>
+                            <div class="col-sm-8">
+                                <field name="issuingbank_trf_sitef" widget="selection"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="issuingid_trf_sitef" class="col-form-label">Identificación Emisor</label>
+                            <div class="col-sm-8">
+                                <field name="issuingid_trf_sitef"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="issuingnumber_trf_sitef" class="col-form-label">Número de cuenta Emisor</label>
+                            <div class="col-sm-8">
+                                <field name="issuingnumber_trf_sitef"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,70 @@
+.form-date {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    width: 100%;
+}
+
+.monto-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.monto {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 5px;
+} 
+.pos .popup input, .pos .popup-input {
+    width: 100%;
+}
+
+select {
+    font-family: system-ui;
+}
+.top-right {
+    display: none;
+    position: absolute;
+    top: -8%;
+    left: 103%;
+    text-align: left;
+    font-size: 15px;
+    font-family: system-ui;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    padding: 10px;
+    white-space: nowrap;
+}
+
+.titulo {
+    font-size: 25px;
+}
+
+.img-logo {
+    position: absolute;
+    top: -8%;
+    left: -2%;
+    width: 24%;
+    border-radius: 10px;
+    opacity: 90%;
+}
+
+.mostrar-datos {
+    position: absolute;
+    top: 4%;
+    right: 2%;
+    cursor: pointer;
+}

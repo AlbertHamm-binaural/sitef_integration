@@ -1,0 +1,84 @@
+<templates id="template" name="CambioForm">
+    <t t-name="CambioForm" owl="1">
+        <Draggable>
+            <div class="popup">
+                <header class="title drag-handle">
+                    <p class="titulo">Cambio</p>
+                    <img src="/sitef_pos_integration/static/src/img/logo-sitef.png" class="img-logo" alt="Logo Sitef"/>
+                </header>
+                <main class="body">
+                    <div class="form-group-horizontal">
+                        <div class="form-group">
+                            <label class="subtitle">Documento</label>
+                            <div class="form-group-horizontal">
+                                <select class="input-select" t-ref="tipDocSelect">
+                                    <option value="V">V</option>
+                                    <option value="E">E</option>
+                                    <option value="J">J</option>
+                                    <option value="G">G</option>
+                                </select>
+                                <input type="text" class="input" t-ref="docInput" maxlength="9" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="subtitle">Teléfono</label>
+                            <div class="form-group-horizontal">
+                                <select class="input-select" t-ref="tipNumSelect">
+                                    <option value="0414">0414</option>
+                                    <option value="0424">0424</option>
+                                    <option value="0412">0412</option>
+                                    <option value="0416">0416</option>
+                                    <option value="0426">0426</option>
+                                </select>
+                                <input type="text" class="input" t-ref="telefonoInput" maxlength="7" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="subtitle">Banco</label>
+                        <select class="input" t-ref="bancoSelect">
+                            <option value="">Seleccionar un banco...</option>
+                            <option value="102">(0102) Banco de Venezuela, S.A. Banco Universal</option>
+                            <option value="104">(0104) Banco Venezolano de Crédito, S.A. Banco Universal</option>
+                            <option value="105">(0105) Banco Mercantil C.A., Banco Universal</option>
+                            <option value="108">(0108) Banco Provincial, S.A. Banco Universal</option>
+                            <option value="114">(0114) Banco del Caribe C.A., Banco Universal</option>
+                            <option value="115">(0115) Banco Exterior C.A., Banco Universal</option>
+                            <option value="128">(0128) Banco Caroní C.A., Banco Universal</option>
+                            <option value="134">(0134) Banesco Banco Universal, C.A.</option>
+                            <option value="137">(0137) Banco Sofitasa Banco Universal, C.A.</option>
+                            <option value="138">(0138) Banco Plaza, Banco Universal</option>
+                            <option value="146">(0146) Banco de la Gente Emprendedora C.A.</option>
+                            <option value="151">(0151) Banco Fondo Común, C.A Banco Universal</option>
+                            <option value="156">(0156) 100% Banco, Banco Comercial, C.A</option>
+                            <option value="157">(0157) DelSur, Banco Universal C.A.</option>
+                            <option value="163">(0163) Banco del Tesoro C.A., Banco Universal</option>
+                            <option value="166">(0166) Banco Agrícola de Venezuela C.A., Banco Universal</option>
+                            <option value="168">(0168) Bancrecer S.A., Banco Microfinanciero</option>
+                            <option value="169">(0169) Mi Banco, Banco Microfinanciero, C.A.</option>
+                            <option value="171">(0171) Banco Activo C.A., Banco Universal</option>
+                            <option value="172">(0172) Bancamiga Banco Universal, C.A.</option>
+                            <option value="173">(0173) Banco Internacional de Desarrollo, C.A., Banco Universal</option>
+                            <option value="174">(0174) Banplus Banco Universal, C.A.</option>
+                            <option value="175">(0175) Banco Bicentenario del Pueblo, Banco Universal C.A.</option>
+                            <option value="177">(0177) Banco de la Fuerza Armada Nacional Bolivariana (BANFANB)</option>
+                            <option value="191">(0191) Banco Nacional de Crédito (BNC)</option>
+                        </select>
+                    </div>
+                    <div class="form-group-center">
+                        <label class="subtitle">Monto</label>
+                        <t t-esc="props.amount" class="input"/> Bs.F
+                    </div>
+                </main>
+                <footer class="footer">
+                    <div class="button confirm" t-on-click="confirm" t-att-class="{ 'opaque': isDisabled.value }">
+                        <t t-esc="props.confirmText" />
+                    </div>
+                    <div class="button cancel" t-on-click="cancel" t-att-class="{ 'opaque': isDisabled.value }">
+                        <t t-esc="props.cancelText" />
+                    </div>
+                </footer>
+            </div>
+        </Draggable>
+    </t>
+</templates>
